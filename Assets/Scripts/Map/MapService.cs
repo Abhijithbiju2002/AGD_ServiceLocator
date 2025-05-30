@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 
 namespace ServiceLocator.Map
 {
-    public class MapService : MonoBehaviour
+    public class MapService : GenercMonoSingleton<MapService>
     {
         [SerializeField] private EventService eventService;
         [SerializeField] private MapScriptableObject mapScriptableObject;
@@ -16,20 +16,7 @@ namespace ServiceLocator.Map
         private MapData currentMapData;
         private SpriteRenderer tileOverlay;
 
-        public static MapService Instance { get { return instance; } }
-        private static MapService instance;
 
-        private void Awake()
-        {
-            if (instance == null)
-            {
-                instance = this;
-            }
-            else
-            {
-                Destroy(this.gameObject);
-            }
-        }
         private void Start()
         {
             SubscribeToEvents();

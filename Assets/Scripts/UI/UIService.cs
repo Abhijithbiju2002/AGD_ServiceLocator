@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace ServiceLocator.UI
 {
-    public class UIService : MonoBehaviour
+    public class UIService : GenercMonoSingleton<UIService>
     {
         [SerializeField] private EventService eventService;
         //[SerializeField] private WaveService waveService;
@@ -39,20 +39,7 @@ namespace ServiceLocator.UI
         [SerializeField] private Button playAgainButton;
         [SerializeField] private Button quitButton;
 
-        public static UIService Instance { get { return instance; } }
-        private static UIService instance;
 
-        private void Awake()
-        {
-            if (instance == null)
-            {
-                instance = this;
-            }
-            else
-            {
-                Destroy(this.gameObject);
-            }
-        }
 
         private void Start()
         {
