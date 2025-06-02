@@ -1,21 +1,22 @@
+using System.Collections.Generic;
+using UnityEngine;
+using System.Threading.Tasks;
+using ServiceLocator.Wave.Bloon;
 using ServiceLocator.Events;
+using ServiceLocator.UI;
 using ServiceLocator.Map;
 using ServiceLocator.Sound;
-using ServiceLocator.UI;
-using ServiceLocator.Wave.Bloon;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using UnityEngine;
+using ServiceLocator.Player;
 
 namespace ServiceLocator.Wave
 {
-    public class WaveService : GenercMonoSingleton<WaveService>
+    public class WaveService : MonoBehaviour
     {
         [SerializeField] private EventService eventService;
-        //[SerializeField] private UIService uiService;
-        //[SerializeField] private MapService mapService;
-        //[SerializeField] private SoundService soundService;
-        //[SerializeField] private PlayerService playerService;
+        [SerializeField] private UIService uiService;
+        [SerializeField] private MapService mapService;
+        [SerializeField] private SoundService soundService;
+        [SerializeField] private PlayerService playerService;
 
         [SerializeField] private WaveScriptableObject waveScriptableObject;
         private BloonPool bloonPool;
@@ -23,7 +24,6 @@ namespace ServiceLocator.Wave
         private int currentWaveId;
         private List<WaveData> waveDatas;
         private List<BloonController> activeBloons;
-
 
         private void Start()
         {
@@ -33,7 +33,7 @@ namespace ServiceLocator.Wave
 
         private void InitializeBloons()
         {
-            bloonPool = new BloonPool(waveScriptableObject);
+            bloonPool = new BloonPool(playerService, this, soundService, waveScriptableObject);
             activeBloons = new List<BloonController>();
         }
 
@@ -43,24 +43,24 @@ namespace ServiceLocator.Wave
         {
             currentWaveId = 0;
             waveDatas = waveScriptableObject.WaveConfigurations.Find(config => config.MapID == mapId).WaveDatas;
-            UIService.Instance.UpdateWaveProgressUI(currentWaveId, waveDatas.Count);
+            uiService.UpdateWaveProgressUI(currentWaveId, waveDatas.Count);
         }
 
         public void StarNextWave()
         {
             currentWaveId++;
             var bloonsToSpawn = GetBloonsForCurrentWave();
-            var spawnPosition = MapService.Instance.GetBloonSpawnPositionForCurrentMap();
+            var spawnPosition = mapService.GetBloonSpawnPositionForCurrentMap();
             SpawnBloons(bloonsToSpawn, spawnPosition, 0, waveScriptableObject.SpawnRate);
         }
 
         public async void SpawnBloons(List<BloonType> bloonsToSpawn, Vector3 spawnPosition, int startingWaypointIndex, float spawnRate)
         {
-            foreach (BloonType bloonType in bloonsToSpawn)
+            foreach(BloonType bloonType in bloonsToSpawn)
             {
                 BloonController bloon = bloonPool.GetBloon(bloonType);
                 bloon.SetPosition(spawnPosition);
-                bloon.SetWayPoints(MapService.Instance.GetWayPointsForCurrentMap(), startingWaypointIndex);
+                bloon.SetWayPoints(mapService.GetWayPointsForCurrentMap(), startingWaypointIndex);
 
                 AddBloon(bloon);
                 await Task.Delay(Mathf.RoundToInt(spawnRate * 1000));
@@ -79,13 +79,13 @@ namespace ServiceLocator.Wave
             activeBloons.Remove(bloon);
             if (HasCurrentWaveEnded())
             {
-                SoundService.Instance.PlaySoundEffects(Sound.SoundType.WaveComplete);
-                UIService.Instance.UpdateWaveProgressUI(currentWaveId, waveDatas.Count);
+                soundService.PlaySoundEffects(Sound.SoundType.WaveComplete);
+                uiService.UpdateWaveProgressUI(currentWaveId, waveDatas.Count);
 
-                if (IsLevelWon())
-                    UIService.Instance.UpdateGameEndUI(true);
+                if(IsLevelWon())
+                    uiService.UpdateGameEndUI(true);
                 else
-                    UIService.Instance.SetNextWaveButton(true);
+                    uiService.SetNextWaveButton(true);
             }
         }
 
