@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -35,7 +33,15 @@ namespace ServiceLocator.UI
 
         public void OnDrag(PointerEventData eventData)
         {
-            rectTransform.anchoredPosition += eventData.delta;
+            // Vector2 localPoint;
+            // RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform.parent as
+            //    RectTransform, eventData.position,
+            //    eventData.pressEventCamera, //another way 1
+            //    out localPoint);
+            // rectTransform.localPosition = localPoint;
+
+            //rectTransform.anchoredPosition += eventData.delta;//outscal way but delay
+            rectTransform.position = Input.mousePosition;//another way 2
             owner.MonkeyDraggedAt(eventData.position);
         }
 
