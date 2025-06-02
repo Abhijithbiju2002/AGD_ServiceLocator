@@ -3,12 +3,11 @@ using UnityEngine;
 
 namespace ServiceLocator.Sound
 {
-    public class SoundService : GenercMonoSingleton<SoundService>
+    public class SoundService : MonoBehaviour
     {
         [SerializeField] private SoundScriptableObject soundScriptableObject;
         [SerializeField] private AudioSource audioEffects;
         [SerializeField] private AudioSource backgroundMusic;
-
 
         private void Start()
         {

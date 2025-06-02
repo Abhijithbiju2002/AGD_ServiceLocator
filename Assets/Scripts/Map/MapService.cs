@@ -1,12 +1,12 @@
-using ServiceLocator.Events;
-using ServiceLocator.Player;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using ServiceLocator.Player;
+using ServiceLocator.Events;
 
 namespace ServiceLocator.Map
 {
-    public class MapService : GenercMonoSingleton<MapService>
+    public class MapService : MonoBehaviour
     {
         [SerializeField] private EventService eventService;
         [SerializeField] private MapScriptableObject mapScriptableObject;
@@ -15,7 +15,6 @@ namespace ServiceLocator.Map
         private Tilemap currentTileMap;
         private MapData currentMapData;
         private SpriteRenderer tileOverlay;
-
 
         private void Start()
         {

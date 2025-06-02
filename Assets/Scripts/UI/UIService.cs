@@ -1,18 +1,19 @@
+using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using ServiceLocator.Events;
 using ServiceLocator.Wave;
-using System.Collections.Generic;
-using TMPro;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+using ServiceLocator.Player;
 
 namespace ServiceLocator.UI
 {
-    public class UIService : GenercMonoSingleton<UIService>
+    public class UIService : MonoBehaviour
     {
         [SerializeField] private EventService eventService;
-        //[SerializeField] private WaveService waveService;
-        //[SerializeField] private PlayerService playerService;
+        [SerializeField] private WaveService waveService;
+        [SerializeField] private PlayerService playerService;
 
         [Header("Gameplay Panel")]
         [SerializeField] private GameObject gameplayPanel;
@@ -40,10 +41,9 @@ namespace ServiceLocator.UI
         [SerializeField] private Button quitButton;
 
 
-
         private void Start()
         {
-            monkeySelectionController = new MonkeySelectionUIController(cellContainer, monkeyCellPrefab, monkeyCellScriptableObjects);
+            monkeySelectionController = new MonkeySelectionUIController(playerService, cellContainer, monkeyCellPrefab, monkeyCellScriptableObjects);
             MonkeySelectionPanel.SetActive(false);
             monkeySelectionController.SetActive(false);
 
@@ -54,7 +54,7 @@ namespace ServiceLocator.UI
             nextWaveButton.onClick.AddListener(OnNextWaveButton);
             quitButton.onClick.AddListener(OnQuitButtonClicked);
             playAgainButton.onClick.AddListener(OnPlayAgainButtonClicked);
-
+            
             SubscribeToEvents();
         }
 
@@ -71,7 +71,7 @@ namespace ServiceLocator.UI
 
         private void OnNextWaveButton()
         {
-            WaveService.Instance.StarNextWave();
+            waveService.StarNextWave();
             SetNextWaveButton(false);
         }
 
