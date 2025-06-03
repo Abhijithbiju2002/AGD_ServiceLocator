@@ -2,17 +2,17 @@ using ServiceLocator.Map;
 using ServiceLocator.Player.Projectile;
 using ServiceLocator.Sound;
 using ServiceLocator.UI;
-using ServiceLocator.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ServiceLocator.Player
 {
-    public class PlayerService : GenericMonoSingleton<PlayerService>
+    public class PlayerService
     {
-        [SerializeField] public PlayerScriptableObject playerScriptableObject;
+
 
         private ProjectilePool projectilePool;
+        private PlayerScriptableObject playerScriptableObject;
 
         private List<MonkeyController> activeMonkeys;
         private MonkeyView selectedMonkeyView;
@@ -20,8 +20,10 @@ namespace ServiceLocator.Player
         private int money;
         public int Money => money;
 
-        private void Start()
+
+        public PlayerService(PlayerScriptableObject playerScriptableObject)
         {
+            this.playerScriptableObject = playerScriptableObject;
             projectilePool = new ProjectilePool(playerScriptableObject.ProjectilePrefab, playerScriptableObject.ProjectileScriptableObjects);
             InitializeVariables();
         }
