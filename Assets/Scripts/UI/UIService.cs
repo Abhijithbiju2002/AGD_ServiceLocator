@@ -1,15 +1,12 @@
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
+using UnityEngine;
 using UnityEngine.SceneManagement;
-using ServiceLocator.Utilities;
-using ServiceLocator.Events;
-using ServiceLocator.Wave;
+using UnityEngine.UI;
 
 namespace ServiceLocator.UI
 {
-    public class UIService : GenericMonoSingleton<UIService>
+    public class UIService : MonoBehaviour
     {
         [Header("Gameplay Panel")]
         [SerializeField] private GameObject gameplayPanel;
@@ -50,11 +47,11 @@ namespace ServiceLocator.UI
             nextWaveButton.onClick.AddListener(OnNextWaveButton);
             quitButton.onClick.AddListener(OnQuitButtonClicked);
             playAgainButton.onClick.AddListener(OnPlayAgainButtonClicked);
-            
-            SubscribeToEvents();
+
+            //SubscribeToEvents();
         }
 
-        public void SubscribeToEvents() => EventService.Instance.OnMapSelected.AddListener(OnMapSelected);
+        public void SubscribeToEvents() => GameService.Instance.eventService.OnMapSelected.AddListener(OnMapSelected);
 
         public void OnMapSelected(int mapID)
         {
@@ -67,7 +64,7 @@ namespace ServiceLocator.UI
 
         private void OnNextWaveButton()
         {
-            WaveService.Instance.StarNextWave();
+            GameService.Instance.waveService.StarNextWave();
             SetNextWaveButton(false);
         }
 
