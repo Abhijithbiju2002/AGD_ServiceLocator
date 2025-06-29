@@ -43,13 +43,13 @@ namespace ServiceLocator.Main
             MapService = new MapService(mapScriptableObject);
             WaveService = new WaveService(waveScriptableObject);
             SoundService = new SoundService(soundScriptableObject, SFXSource, BGSource);
-            PlayerService = new PlayerService(playerScriptableObject);
+            PlayerService = new PlayerService(playerScriptableObject, SoundService);
         }
 
         private void InjectDependencies()
         {
-            PlayerService.Init(uiService, MapService, SoundService);
-            WaveService.Init(EventService, uiService, MapService, SoundService);
+            PlayerService.Init(uiService, MapService);
+            WaveService.Init(EventService, uiService, MapService, SoundService, PlayerService);
             uiService.Init(EventService, WaveService);
             MapService.Init(EventService);
         }

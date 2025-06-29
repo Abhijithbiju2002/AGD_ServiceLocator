@@ -1,4 +1,4 @@
-using System.Collections;
+using ServiceLocator.Player;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +8,7 @@ namespace ServiceLocator.UI
     {
         private Transform cellContainer;
         private List<MonkeyCellController> monkeyCellControllers;
+        private PlayerService playerService;
 
         public MonkeySelectionUIController(Transform cellContainer, MonkeyCellView monkeyCellPrefab, List<MonkeyCellScriptableObject> monkeyCellScriptableObjects)
         {
@@ -16,7 +17,7 @@ namespace ServiceLocator.UI
 
             foreach (MonkeyCellScriptableObject monkeySO in monkeyCellScriptableObjects)
             {
-                MonkeyCellController monkeyCell = new MonkeyCellController(cellContainer, monkeyCellPrefab, monkeySO);
+                MonkeyCellController monkeyCell = new MonkeyCellController(cellContainer, monkeyCellPrefab, monkeySO, playerService);
                 monkeyCellControllers.Add(monkeyCell);
             }
         }

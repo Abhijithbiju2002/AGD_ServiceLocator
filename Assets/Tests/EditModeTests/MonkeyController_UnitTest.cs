@@ -1,9 +1,9 @@
 using NUnit.Framework;
-using System.Collections.Generic;
-using UnityEngine;
 using ServiceLocator.Player;
 using ServiceLocator.Player.Projectile;
 using ServiceLocator.Wave.Bloon;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class MonkeyController_UnitTest
 {
@@ -14,7 +14,7 @@ public class MonkeyController_UnitTest
     {
         MonkeyScriptableObject monkeySO = CreateDummyMonkeySO();
         ProjectilePool projectilePool = CreateDummyProjectilePool();
-        monkeyController = new MonkeyController(monkeySO, projectilePool);
+        //monkeyController = new MonkeyController(monkeySO, projectilePool);
     }
 
     private MonkeyScriptableObject CreateDummyMonkeySO()

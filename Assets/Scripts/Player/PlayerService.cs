@@ -22,19 +22,21 @@ namespace ServiceLocator.Player
         public int Money { get; private set; }
 
 
-        public PlayerService(PlayerScriptableObject playerScriptableObject)
+        public PlayerService(PlayerScriptableObject playerScriptableObject, SoundService soundService)
         {
+            this.soundService = soundService;
+
             this.playerScriptableObject = playerScriptableObject;
             projectilePool = new ProjectilePool(playerScriptableObject.ProjectilePrefab, playerScriptableObject.ProjectileScriptableObjects);
 
         }
 
 
-        public void Init(UIService uiService, MapService mapService, SoundService soundService)
+        public void Init(UIService uiService, MapService mapService)
         {
             this.uiService = uiService;
             this.mapService = mapService;
-            this.soundService = soundService;
+
 
             InitializeVariables();
         }
@@ -114,7 +116,7 @@ namespace ServiceLocator.Player
         public void SpawnMonkey(MonkeyType monkeyType, Vector3 spawnPosition)
         {
             MonkeyScriptableObject monkeyScriptableObject = GetMonkeyScriptableObjectByType(monkeyType);
-            MonkeyController monkey = new MonkeyController(monkeyScriptableObject, projectilePool);
+            MonkeyController monkey = new MonkeyController(monkeyScriptableObject, projectilePool, soundService);
 
             monkey.SetPosition(spawnPosition);
             activeMonkeys.Add(monkey);
